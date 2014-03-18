@@ -1,0 +1,34 @@
+{
+  "name": "scroll-bounds",
+  "version": "0.0.1",
+  "description": "Event emitter for scroll boundaries.",
+  "main": "index.js",
+  "scripts": {
+    "watch": "watchify examples/main.js -o examples/bundle.js",
+    "test": "tap test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/derekr/scroll-bounds"
+  },
+  "keywords": [
+    "scroll",
+    "bounds",
+    "dom",
+    "scrolling",
+    "boundary",
+    "viewport"
+  ],
+  "author": "Derek Reynolds <drk@diy.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/derekr/scroll-bounds/issues"
+  },
+  "homepage": "https://github.com/derekr/scroll-bounds",
+  "devDependencies": {
+    "watchify": "^0.6.2"
+  },
+  "dependencies": {
+    "inherits": "^2.0.1"
+  }
+}
