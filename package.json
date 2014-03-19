@@ -1,6 +1,6 @@
 {
   "name": "scroll-bounds",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Event emitter for scroll boundaries.",
   "main": "index.js",
   "scripts": {
