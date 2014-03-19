@@ -7,7 +7,7 @@ var inherits = require('inherits'),
 function isBottom ($el) {
     if ($el === window || $el === document.body) {
         var body = document.body
-        return (window.innerHeight === body.clientHeight - body.scrollTop);
+        return (window.innerHeight >= body.clientHeight - body.scrollTop);
     } else {
         return ($el.scrollHeight <= $el.clientHeight + $el.scrollTop);
     }
