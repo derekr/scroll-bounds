@@ -1,35 +1,65 @@
-var inherits = require('inherits')
+var inherits = require('inherits'),
     EventEmitter = require('events').EventEmitter;
 
-function ScrollBounds ($el) {
+/**
+ * Determining bottom of element is different for body.
+ */
+function isBottom ($el) {
+    if ($el === window || $el === document.body) {
+        var body = document.body
+        return (window.innerHeight === body.clientHeight - body.scrollTop);
+    } else {
+        return ($el.scrollHeight <= $el.clientHeight + $el.scrollTop);
+    }
+}
+
+function ScrollBounds ($el, data) {
+    data = data || {};
+
+    if (typeof data.interval === 'number') data.interval = 50;
+
     var me = this;
+
+    this.$el = $el;
 
     this.boundary = null;
 
-    $el.addEventListener('scroll', function (e) {
-        var target = e.target;
-
-        if (target.scrollTop === 0) {
-            me.boundary = 'top';
-            me.emit(me.boundary);
-            return;
-        }
-
-        if (target.scrollHeight <= target.clientHeight + target.scrollTop) {
-            me.boundary = 'bottom';
-            me.emit(me.boundary);
-            return;
-        }
-
-        if (me.boundary !== null) {
-            me.emit('break', me.boundary);
-            me.boundary = null;
-        }
-    });
+    /**
+     * When listening on body scroll events sometimes the event would
+     * stop firing. Simpler to check scroll position on an interval.
+     */
+    setInterval(function () {
+        me.scrolled();
+    }, data.interval);
 }
 
 inherits(ScrollBounds, EventEmitter);
 
-module.exports = function ($el) {
-    return new ScrollBounds($el);
+ScrollBounds.prototype.scrolled = function () {
+    var bottom = isBottom(this.$el);
+
+    if (this.$el.scrollTop === this.lastScrollTop) return;
+
+    this.lastScrollTop = this.$el.scrollTop;
+
+    if (this.$el.scrollTop === 0) {
+        this.boundary = 'top';
+        this.emit(this.boundary);
+        return;
+    }
+
+    if (isBottom(this.$el)) {
+        this.boundary = 'bottom';
+        this.emit(this.boundary);
+        return;
+    }
+
+    if (this.boundary !== null) {
+        this.emit('break', this.boundary);
+        this.boundary = null;
+    }
+};
+
+module.exports = function ($el, data) {
+    return new ScrollBounds($el, data);
 };
